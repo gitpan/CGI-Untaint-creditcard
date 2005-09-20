@@ -1,15 +1,13 @@
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-    NAME		=> 'CGI::Untaint::creditcard',
-    VERSION_FROM	=> 'lib/CGI/Untaint/creditcard.pm', 
-    PREREQ_PM		=> { 
-                              CGI::Untaint => 0.01,
-                              Business::CreditCard => 0.21,
-                              Test::More => 0.10,
-                           }, 
-    ($] > 5.005 ? () : (
-      ABSTRACT_FROM => 'lib/CGI/Untaint/creditcard.pm', 
-      AUTHOR        => 'Tony Bowden <kasei@tmtm.com>',
-    )),
+	NAME          => 'CGI::Untaint::creditcard',
+	AUTHOR        => 'Tony Bowden <tmtm@cpan.org>',
+	VERSION_FROM  => 'lib/CGI/Untaint/creditcard.pm',
+	ABSTRACT_FROM => 'lib/CGI/Untaint/creditcard.pm',
+	PREREQ_PM     => {
+		'CGI::Untaint'                 => 0.01,
+		'Business::CreditCard::Object' => 0,
+		'Test::More'                   => 0.10,
+	},
 );

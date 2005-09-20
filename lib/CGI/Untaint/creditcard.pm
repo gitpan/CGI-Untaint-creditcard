@@ -1,18 +1,17 @@
 package CGI::Untaint::creditcard;
 
+$VERSION = '1.00';
+
 use strict;
 use base 'CGI::Untaint::printable';
-require Business::CreditCard;
-
-use vars qw/$VERSION/;
-$VERSION = '0.01';
+require Business::CreditCard::Object;
 
 sub is_valid { 
   my $self = shift;
-  (my $ccno = $self->value) =~ tr/-/ /;
-  return unless Business::CreditCard::validate($ccno);
-  $self->value($ccno);
-  return $ccno;
+	my $card = Business::CreditCard::Object->new($self->value);
+  return unless $card->is_valid;
+  $self->value($card);
+  return $card->number;
 }
 
 =head1 NAME
@@ -26,27 +25,38 @@ CGI::Untaint::creditcard - validate a creditcard
 
   my $cc = $handler->extract(-as_creditcard => 'ccno');
 
+	print $cc->number;
+
 =head1 DESCRIPTION
 
-This Input Handler verifies that it is dealing with a reasonable
-credit card number (i.e. one that Business::CreditCard believes
-to be valid.) It also replaces any minus signs with spaces, as 
-B:CC doesn't like those.
+=head2 is_valid
+
+This Input Handler verifies that it is dealing with a reasonable credit
+card number (i.e. one that L<Business::CreditCard::Object> believes to
+be valid.)
+
+The resulting object will be set back into value().
 
 =head1 SEE ALSO
 
-L<CGI::Untaint>. L<Business::CreditCard>.
+L<CGI::Untaint>. L<Business::CreditCard::Object>.
 
-=head1 AUTHOR
+=head1 BUGS and QUERIES
 
-Tony Bowden, E<lt>kasei@tmtm.comE<gt>. 
+Please direct all correspondence regarding this module to:
+  bug-CGI-Untaint-creditcard@rt.cpan.org
 
 =head1 COPYRIGHT
 
-Copyright (C) 2001 Tony Bowden. All rights reserved.
+  Copyright (C) 2001-2005 Tony Bowden.
 
-This module is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+  This program is free software; you can redistribute it and/or modify it under
+  the terms of the GNU General Public License; either version 2 of the License,
+  or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful, but WITHOUT
+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  FOR A PARTICULAR PURPOSE.
 
 =cut
 
